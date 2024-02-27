@@ -96,7 +96,7 @@ Citizen.CreateThread(function()
     BccUtils.Blips:SetBlip('Annesburg Mine', 'blip_location_lower', 0.2, 2776.93, 1339.18, 70.74)
 end)
 
-function PlayAnim(animDict, animName, time, raking, loopUntilTimeOver) --function to play an animation
+function PlayAnim(animDict, animName, time, mining, loopUntilTimeOver) --function to play an animation
     local animTime = time
     local ped = PlayerPedId()
     RequestAnimDict(animDict)
@@ -110,7 +110,7 @@ function PlayAnim(animDict, animName, time, raking, loopUntilTimeOver) --functio
       animTime = -1
     end
     TaskPlayAnim(PlayerPedId(), animDict, animName, 1.0, 1.0, animTime, flag, 0, true, 0, false, 0, false)
-    if raking then
+    if mining then
       local playerCoords = GetEntityCoords(PlayerPedId())
       local pickaxeObj = CreateObject("p_pickaxe01x", playerCoords.x, playerCoords.y, playerCoords.z, true, true, false)
       AttachEntityToEntity(pickaxeObj, PlayerPedId(), GetEntityBoneIndexByName(PlayerPedId(), "PH_R_Hand"), 0.0, 0.0, 0.19, 0.0, 0.0, 0.0, false, false, true, false, 0, true, false, false)
