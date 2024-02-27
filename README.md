@@ -21,4 +21,5 @@ Instructions on how to use your project.
 
 Feel free to make a PR
 
-
+## Credits
+Inspiration from wk_mining https://github.com/WakyRedm/wk_mining/
