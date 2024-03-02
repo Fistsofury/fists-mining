@@ -1,15 +1,16 @@
 Config = {}
 
-Config.Debug = true -- Enable or disable debug mode
+Config.Debug = false -- Enable or disable debug mode
 Config.Blips = true -- Enable or disable blips
 Config.MineButton = 0x4CC0E2FE --B Key
 Config.MiningTime = 10000 -- 10 seconds
 Config.MiningTool = "pickaxe" -- Name of the tool to equip
+Config.ToolDurability = 100 -- Durability of the tool
 ---------------------------------------------
 Config.LootAmountMin = 1 -- Amount of one item to give, example 1 copper
 Config.LootAmountMax = 3 -- Amount of one item to give, example 3 copper
 Config.ExtraReward = "gold_nugget"
-Config.ExtraRewardChance = 99 -- 30% chance to get extra reward
+Config.ExtraRewardChance = 30 -- 30% chance to get extra reward
 Config.ExtraRewardAmount = 1 -- Amount of extra reward to give
 ---------------------------------------------
 Config.Minigame = {
@@ -23,6 +24,10 @@ Config.Minigame = {
     speed = 34, -- How fast the orbiter grows
     strict = true -- if true, letting the timer run out counts as a failed attempt
 }
+---------------------------------------------
+Config.WebhookURL = "https://discord.com/api/webhooks/yourwebhook" -- Discord Webhook URL
+Config.WebhookName = "Mining" -- Name of the Webhook
+Config.WebhookAvatar = "https://i.imgur.com/4w3U9xv.png" -- Avatar of the Webhook
 ---------------------------------------------
 -- Add your mine locations here
 Config.Mines = {
@@ -67,6 +72,6 @@ Config.MineOre = {
     Annesburg = {"coal", "rock", "coal", "coal", "coal"}, --the more you add the less the chance 1 item has
     Kamassa = {"nitrite", "rock"},
     Grizzly = {"iron", "rock"},
-    Tumbleweed = {"copper", "rock"},
+    Tumbleweed = {"copperore", "rock"},
 }
 

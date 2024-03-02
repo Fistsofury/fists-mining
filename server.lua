@@ -1,8 +1,11 @@
 local VORPcore = exports.vorp_core:GetCore()
-
+local BccUtils = exports['bcc-utils'].initiate()
 RegisterServerEvent("fists-mining:awardloot")
 AddEventHandler("fists-mining:awardloot", function(mineName)
     local _source = source
+    local Character = VORPcore.getUser(source).getUsedCharacter 
+    local playerName = Character.firstname
+    local playerSurname = Character.lastname
     if Config.Debug then
         print("Trying to award loot to player " .. _source)
     end
@@ -13,13 +16,14 @@ AddEventHandler("fists-mining:awardloot", function(mineName)
         print("Error: No loot items configured for mineName: " .. tostring(mineName))
         return
     end
-
+    deductPickaxeDurability(_source)
     local selectedItem = lootItems[math.random(#lootItems)]
     local amount = math.random(Config.LootAmountMin, Config.LootAmountMax)
     exports.vorp_inventory:canCarryItem(_source, selectedItem, amount, function(canCarry)
         if canCarry then
             exports.vorp_inventory:addItem(_source, selectedItem, amount)
             TriggerClientEvent("vorp:TipRight", _source, "You have found " .. amount .. " " .. selectedItem, 3000)
+            BccUtils.Discord.sendMessage(Config.WebhookURL, Config.WebhookName, Config.WebhookAvatar, "Fists-Mining", "Player " .. playerName .. " " .. playerSurname .. " has successfully mined " .. amount .. " " .. selectedItem)
         else
             TriggerClientEvent("vorp:TipRight", _source, "You can't carry more " .. selectedItem, 3000)
         end
@@ -30,12 +34,33 @@ AddEventHandler("fists-mining:awardloot", function(mineName)
             if canCarry then
                 exports.vorp_inventory:addItem(_source, Config.ExtraReward, Config.ExtraRewardAmount)
                 TriggerClientEvent("vorp:TipRight", _source, "You have found an extra " .. Config.ExtraRewardAmount .. " " .. Config.ExtraReward, 3000)
+                BccUtils.Discord.sendMessage(Config.WebhookURL, Config.WebhookName, Config.WebhookAvatar, "Fists-Mining", "Player " .. playerName .. " " .. playerSurname .. " has successfully mined " .. Config.ExtraRewardAmount .. " " .. Config.ExtraReward)
             else
                 TriggerClientEvent("vorp:TipRight", _source, "You can't carry more " .. Config.ExtraReward, 3000)
             end
         end)
     end
 end)
+
+function deductPickaxeDurability(_source)
+    local pickaxe = exports.vorp_inventory:getItem(_source, Config.MiningTool)
+
+    if pickaxe and pickaxe.count > 0 then
+        local meta = pickaxe.metadata or {}
+        local durability = meta.durability or Config.ToolDurability
+        durability = durability - 1
+        meta.durability = durability
+        meta.description = "Durability: " .. durability 
+        exports.vorp_inventory:subItem(_source, Config.MiningTool, 1)
+
+        if durability > 0 then
+            exports.vorp_inventory:addItem(_source, Config.MiningTool, 1, meta)
+        else
+            TriggerClientEvent("vorp:TipRight", _source, "Your pickaxe broke.", 3000)
+        end
+    end
+end
+
 
 
 
@@ -60,4 +85,3 @@ AddEventHandler("fists-mining:checkForTool", function()
         end
     end)
 end)
-
